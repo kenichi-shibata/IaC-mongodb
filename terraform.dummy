@@ -1,0 +1,7 @@
+region="" /* region for aws */
+instance_type="" /* for all instances */
+pre_tag=""
+service_name=""
+post_fix=""
+ebs_optimized="0"
+key_pair="" /* exact same from your aws key_pair */
