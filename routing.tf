@@ -15,7 +15,7 @@ resource "aws_default_route_table" "public_access_igw" {
 
 # Create a routing table for NAT and Private subnet
 resource "aws_route_table" "private_subnet_nat" {
-  vpc_id				         	 = "${aws_vpc.main.id}"
+  vpc_id	= "${aws_vpc.main.id}"
 
 	tags = {
 		Name = "${var.pre_tag}-${var.service_name}-private-route"

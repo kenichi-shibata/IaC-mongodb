@@ -19,8 +19,12 @@ variable "service_name" {
   description = "name of the service"
 }
 
-variable "instance_type"  {
+variable "instance_type_openvpn"  {
   description = "instance type of the first ec2 instance"
+}
+
+variable "instance_type_configsvr" {
+	description = "instance type of the config server"
 }
 
 variable "ebs_optimized" {

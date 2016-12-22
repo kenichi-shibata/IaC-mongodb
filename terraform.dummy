@@ -1,7 +1,15 @@
-region="" /* region for aws */
-instance_type="" /* for all instances */
-pre_tag=""
-service_name=""
-post_fix=""
-ebs_optimized="0"
-key_pair="" /* exact same from your aws key_pair */
+/*aws related*/
+region		="" /* region for aws */
+pre_tag		=""
+post_tag	=""
+
+ebs_optimized	="" /* 1 = true 0 = false please check instance types which supports ebs */
+key_pair			="" /* exact same from your aws key_pair */
+
+/*instances */
+instance_type_openvpn 	="" /* to be removed */
+instance_type_configsvr	="" /* instance type of the 3 config servers */
+
+
+/*service*/
+service_name	=""
