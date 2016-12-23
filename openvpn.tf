@@ -2,8 +2,8 @@ resource "aws_instance" "vpn_server" {
 	ami = "${lookup(var.amazon_amis, var.region)}"
 
 	tags = {
-		Name = "${var.pre_tag}-${var.service_name}-${var.post_tag}"
-		env = "${var.env_tag}"
+		Name = "${var.pre_tag}-${var.service_name}-openvpn"
+		Env = "${var.env_tag}"
 	}
 
 	instance_type = "${var.instance_type_openvpn}"
@@ -48,6 +48,20 @@ resource "aws_security_group" "openvpn_ports" {
 			cidr_blocks = ["0.0.0.0/0"]
 	}
 
+	ingress {
+	  from_port = 0
+	  to_port = 0
+	  protocol = "icmp"
+	  cidr_blocks = ["${aws_vpc.main.cidr_block}"]
+	}
+
+	ingress {
+		from_port = 22
+		to_port = 22
+		protocol = "tcp"
+		cidr_blocks = ["0.0.0.0/0"]
+	}
+
   egress {
       from_port = 0
       to_port = 0
@@ -60,5 +74,5 @@ resource "aws_security_group" "openvpn_ports" {
 }
 
 output "openvpn_server" {
-	value = "${aws_security_group.openvpn_server.private_ip}"
+	value = "${aws_security_group.openvpn_ports.private_ip}"
 }

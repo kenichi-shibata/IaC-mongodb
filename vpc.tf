@@ -1,3 +1,8 @@
+# Gets the list of availability zones in selected aws region
+data "aws_availability_zones" "available" {
+	state = "available"
+}
+
 # Create a VPC to launch our instances into
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
@@ -28,6 +33,7 @@ resource "aws_subnet" "management" {
 resource "aws_subnet" "public_primary" {
   vpc_id                  = "${aws_vpc.main.id}"
   cidr_block              = "10.0.1.0/24"
+	availability_zone 			= "${data.aws_availability_zones.available.names[0]}"
   map_public_ip_on_launch = true
 	tags = {
 		Name = "${var.pre_tag}-${var.service_name}-public"
@@ -37,12 +43,32 @@ resource "aws_subnet" "public_primary" {
 resource "aws_subnet" "private_primary" {
   vpc_id                  = "${aws_vpc.main.id}"
   cidr_block              = "10.0.2.0/24"
+	availability_zone 			= "${data.aws_availability_zones.available.names[0]}"
   map_public_ip_on_launch = false
 	tags = {
 		Name = "${var.pre_tag}-${var.service_name}-private"
 	}
 }
 
+resource "aws_subnet" "public_secondary" {
+  vpc_id                  = "${aws_vpc.main.id}"
+  cidr_block              = "10.0.3.0/24"
+	availability_zone 			= "${data.aws_availability_zones.available.names[1]}"
+  map_public_ip_on_launch = true
+	tags = {
+		Name = "${var.pre_tag}-${var.service_name}-public"
+	}
+}
+
+resource "aws_subnet" "private_secondary" {
+  vpc_id                  = "${aws_vpc.main.id}"
+  cidr_block              = "10.0.4.0/24"
+	availability_zone 			= "${data.aws_availability_zones.available.names[1]}"
+  map_public_ip_on_launch = false
+	tags = {
+		Name = "${var.pre_tag}-${var.service_name}-private"
+	}
+}
 ## create an elastic ip
 resource "aws_eip" "nat_eip" {
   vpc      = true
