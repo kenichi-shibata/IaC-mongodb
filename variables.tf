@@ -19,8 +19,13 @@ variable "service_name" {
   description = "name of the service"
 }
 
-variable "instance_type"  {
+variable "instance_type_openvpn"  {
   description = "instance type of the first ec2 instance"
+}
+
+variable "instance_type_configsvr" {
+	default = "m3.large"
+	description = "instance type of the config server"
 }
 
 variable "ebs_optimized" {
@@ -35,6 +40,26 @@ variable "region" {
 variable "key_pair" {
   description = "aws keypair"
 	default = "id_rsa"
+}
+
+variable "count_configsvr" {
+  default = "3"
+	description = "Number of config servers to be used"
+}
+
+variable "tenancy_configsvr" {
+  default = "shared"
+	description = "Harware tenancy of the config server"
+}
+
+variable "volume_iops_configsvr" {
+	default = "2000"
+	description = " IOPS for the aws ebs config server/s"
+}
+
+variable "volume_size_configsvr" {
+	default = "100"
+	description = "EBS ssd io1 block size for the config server"
 }
 
 
