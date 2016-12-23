@@ -74,5 +74,5 @@ resource "aws_security_group" "openvpn_ports" {
 }
 
 output "openvpn_server" {
-	value = "${aws_security_group.openvpn_ports.private_ip}"
+	value = "${aws_instance.vpn_server.public_ip}"
 }

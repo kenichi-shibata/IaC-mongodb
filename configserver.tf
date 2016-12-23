@@ -6,7 +6,7 @@ resource "aws_instance" "cfg" {
 	ami = "${lookup(var.amazon_amis, var.region)}"
 	count = "${var.count_configsvr}"
 	tags = {
-		Name = "${var.pre_tag}-${var.service_name}-cfgsvr"
+		Name = "${var.pre_tag}-${var.service_name}-cfgsvr0${count.index}"
 		Env = "${var.env_tag}"
 	}
 
@@ -18,7 +18,7 @@ resource "aws_instance" "cfg" {
 	disable_api_termination = "true"
 	monitoring = "true"
 
-	subnet_id = "${aws_subnet.private_primary.id}"
+	subnet_id = "${lookup(map("0","${aws_subnet.private_primary.id}","1","${aws_subnet.private_secondary.id}"),count.index % 2)}"
 	associate_public_ip_address = false
 	vpc_security_group_ids =  ["${aws_security_group.allow_mongodb.id}"]
 
@@ -36,17 +36,17 @@ resource "aws_security_group" "allow_mongodb" {
   description = "Allow all mongodb traffic padded"
 	vpc_id = "${aws_vpc.main.id}"
   ingress {
-      from_port = 27015
-      to_port = 27020
-      protocol = "tcp"
-      cidr_blocks = ["${aws_vpc.main.cidr_block}"]
+    from_port = 27015
+    to_port = 27020
+    protocol = "tcp"
+    cidr_blocks = ["${aws_vpc.main.cidr_block}"]
   }
 
 	ingress {
 		from_port = 22
 		to_port = 22
 		protocol = "tcp"
-		cidr = ["${aws_vpc.main.cidr_block}"]
+    cidr_blocks = ["${aws_vpc.main.cidr_block}"]
 	}
 
 	ingress {
