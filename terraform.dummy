@@ -12,9 +12,9 @@ instance_type_openvpn 	="" /* for openvpn server (t2.micro recommended) */
 instance_type_configsvr	="" /* instance type of the config servers (memory Optimized instance recommended) m4.large default */
 count_configsvr 				="" /* number of config servers (3 recommended) */
 
-tenancy_configsvr				="" /* tenancy type defaults to default (dedicated | default | host) */
-volume_size_configsvr		="" /* defaults to 100 gb */
-volume_iops_configsvr 	="" /* defaults to 2000 iops */
+tenancy_configsvr				="" /* tenancy type defaults to shared (dedicated | shared) */
+volume_size_configsvr		="" /* defaults to 100 gb (please enable ebs_optimized for this)*/
+volume_iops_configsvr 	="" /* defaults to 2000 iops (please enable ebs_optimized for this) */
 
 instance_type_shardsvr	="" /* instance type of the config servers (memory Optimized instance recommended) m4.large default */
 count_shardsvr 				="" /* number of config servers (1 default) */

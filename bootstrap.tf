@@ -25,6 +25,7 @@ resource "null_resource" "bootstrap_mongodb" {
 			bastion_host = "${aws_instance.vpn_server.public_ip}"
 		}
 	}
+<<<<<<< HEAD
 /* SANITY CHECK ping google.com to check if instance is connected and NAT is up */
 	provisioner "remote-exec" {
 		inline = [
@@ -38,6 +39,15 @@ resource "null_resource" "bootstrap_mongodb" {
 			"sudo yum install -y mongodb-org",
 			"sudo service mongod start",
 			"sudo cat /var/log/mongodb/mongod.log",
+=======
+
+	provisioner "remote-exec" {
+		inline = [
+			"sudo yum update -y",
+			"sudo yum install -y mongodb-org",
+			"sudo service mongod start",
+			"sudo mcat /var/log/mongodb/mongod.log",
+>>>>>>> added mongodb installer
 			"sudo chkconfig mongod on",
 		]
 		connection {
@@ -46,6 +56,7 @@ resource "null_resource" "bootstrap_mongodb" {
 		}
 	}
 }
+<<<<<<< HEAD
 
 /* add config svr specific setup to servers*/
 data "template_file" "config_svr" {
@@ -82,3 +93,5 @@ resource "null_resource" "config_svr_mongodb" {
 		}
 	}
 }
+=======
+>>>>>>> added mongodb installer
