@@ -4,11 +4,6 @@ variable "pre_tag" {
   description = "Pre Tag for all the resources"
   default = "pre"
 }
-#Post tag to append to all resources
-variable "post_tag" {
-  description = "Post Tag for all the resources"
-  default = "post"
-}
 #Environment Tag
 variable "env_tag" {
   description = "Name of Environment"

@@ -13,6 +13,15 @@ resource "aws_instance" "vpn_server" {
 	associate_public_ip_address = true
 	depends_on = ["aws_security_group.openvpn_ports"]
 	vpc_security_group_ids =  ["${aws_security_group.openvpn_ports.id}"]
+
+	provisioner "remote-exec" {
+		connection = {
+			user = "ec2-user"
+		}
+		inline = [
+			"sudo sed -i 's/#AllowAgentForwarding yes/AllowAgentForwarding yes/g' /etc/ssh/sshd_config",
+		]
+	}
 }
 
 resource "aws_security_group" "openvpn_ports" {
@@ -71,6 +80,7 @@ resource "aws_security_group" "openvpn_ports" {
 	tags {
 		Name = "allow_openvpn_traffic"
 	}
+
 }
 
 output "openvpn_server" {

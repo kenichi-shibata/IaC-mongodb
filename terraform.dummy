@@ -1,7 +1,7 @@
 /*aws related*/
 region		="" /* region for aws */
 pre_tag		=""
-post_tag	=""
+
 
 ebs_optimized	="" /* 1 = true 0 = false please check instance types which supports ebs */
 key_pair			="" /* exact same from your aws key_pair */
@@ -12,8 +12,8 @@ instance_type_openvpn 	="" /* for openvpn server */
 instance_type_configsvr	="" /* instance type of the config servers (memory Optimized instance recommended) m3.large default */
 count_configsvr 				="" /* number of config servers (3 recommended) */
 tenancy_configsvr				="" /* tenancy type defaults to shared (dedicated | shared) */
-volume_size_configsvr		="" /* defaults to 100 gb */
-volume_iops_configsvr 	="" /* defaults to 2000 iops */
+volume_size_configsvr		="" /* defaults to 100 gb (please enable ebs_optimized for this)*/
+volume_iops_configsvr 	="" /* defaults to 2000 iops (please enable ebs_optimized for this) */
 
 /*service*/
-service_name	=""
+service_name	="mongodb"
