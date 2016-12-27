@@ -29,6 +29,8 @@ resource "null_resource" "bootstrap_mongodb" {
 	provisioner "remote-exec" {
 		inline = [
 			"sudo yum update -y",
+		 	"sudo service ntpd restart",
+			"sudo chkconfig ntpd on"
 			"sudo yum install -y mongodb-org",
 			"sudo service mongod start",
 			"sudo mcat /var/log/mongodb/mongod.log",
