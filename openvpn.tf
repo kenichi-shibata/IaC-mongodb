@@ -1,6 +1,8 @@
 resource "aws_instance" "vpn_server" {
 	ami = "${lookup(var.amazon_amis, var.region)}"
-
+	depends_on = ["aws_nat_gateway.gw"]
+	depends_on = ["aws_nat_gateway.gw_secondary"]
+	
 	tags = {
 		Name = "${var.pre_tag}-${var.service_name}-openvpn"
 		Env = "${var.env_tag}"
