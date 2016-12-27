@@ -25,16 +25,56 @@ resource "null_resource" "bootstrap_mongodb" {
 			bastion_host = "${aws_instance.vpn_server.public_ip}"
 		}
 	}
-
+/* SANITY CHECK ping google.com to check if instance is connected and NAT is up */
 	provisioner "remote-exec" {
 		inline = [
+			"while true;
+				do ping -c1 www.google.com > /dev/null && echo 'internet is up' && break;
+				sleep 5;
+			done; ",
 			"sudo yum update -y",
 		 	"sudo service ntpd restart",
-			"sudo chkconfig ntpd on"
+			"sudo chkconfig ntpd on",
 			"sudo yum install -y mongodb-org",
 			"sudo service mongod start",
-			"sudo mcat /var/log/mongodb/mongod.log",
+			"sudo cat /var/log/mongodb/mongod.log",
 			"sudo chkconfig mongod on",
+		]
+		connection {
+			user = "ec2-user"
+			bastion_host = "${aws_instance.vpn_server.public_ip}"
+		}
+	}
+}
+
+/* add config svr specific setup to servers*/
+data "template_file" "config_svr" {
+	template = "${file("${path.module}/templates/configserver.conf")}"
+	count = "${var.count_configsvr}"
+	vars {
+		bindIp = "${element(aws_instance.cfg.*.private_ip, count.index)}"
+	}
+}
+
+resource "null_resource" "config_svr_mongodb" {
+	depends_on = ["null_resource.bootstrap_mongodb"]
+	count = "${var.count_configsvr}"
+
+	triggers {
+		cfg_cluster = "${join(",",aws_instance.cfg.*.id)}"
+	}
+	connection {
+		host = "${element(aws_instance.cfg.*.private_ip, count.index)}"
+	}
+
+/* remove and recreate default mongod.conf */
+	provisioner "remote-exec" {
+		inline = [
+			"sudo rm -rf /etc/mongod.conf || echo 'suppressing errors!'",
+			"sudo tee /etc/mongod.conf <<EOF",
+			"${element(data.template_file.config_svr.*.rendered, count.index)}",
+			"EOF",
+			"sudo service mongod restart",
 		]
 		connection {
 			user = "ec2-user"
