@@ -1,6 +1,6 @@
 resource "aws_instance" "shards" {
 	ami = "${lookup(var.amazon_amis, var.region)}"
-<
+
 	count = "${var.count_shardsvr} * ${var.count_shardsvr_replica}"
 
 	tags = {
