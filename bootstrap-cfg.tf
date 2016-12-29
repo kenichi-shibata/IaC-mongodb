@@ -25,13 +25,9 @@ resource "null_resource" "bootstrap_configsvr" {
 			bastion_host = "${aws_instance.vpn_server.public_ip}"
 		}
 	}
-/* SANITY CHECK ping google.com to check if instance is connected and NAT is up */
+
 	provisioner "remote-exec" {
 		inline = [
-			"while true;
-				do ping -c1 www.google.com > /dev/null && echo 'internet is up' && break;
-				sleep 5;
-			done; ",
 			"sudo yum update -y",
 		 	"sudo service ntpd restart",
 			"sudo chkconfig ntpd on",
