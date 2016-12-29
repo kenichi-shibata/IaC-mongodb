@@ -1,4 +1,4 @@
-resource "null_resource" "bootstrap_mongodb" {
+resource "null_resource" "bootstrap_config_svr" {
 	depends_on = ["aws_instance.cfg"]
 	depends_on = ["aws_instance.vpn_server"]
 	count = "${var.count_configsvr}"
