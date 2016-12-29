@@ -1,4 +1,4 @@
-resource "null_resource" "bootstrap_config_svr" {
+resource "null_resource" "bootstrap_shard_svr" {
 	depends_on = ["aws_instance.shards"]
 	depends_on = ["aws_instance.vpn_server"]
 	count = "${var.count_configsvr}"
@@ -56,7 +56,7 @@ data "template_file" "shard_svr" {
 }
 
 resource "null_resource" "config_svr_mongodb" {
-	depends_on = ["null_resource.bootstrap_mongodb"]
+	depends_on = ["null_resource.bootstrap_shard_svr"]
 	count = "${var.count_configsvr}"
 
 	triggers {

@@ -54,7 +54,7 @@ data "template_file" "query_router" {
 }
 
 resource "null_resource" "query_router_mongodb" {
-	depends_on = ["null_resource.bootstrap_mongodb"]
+	depends_on = ["null_resource.bootstrap_query_router"]
 	count = "${var.count_queryrouter}"
 
 	triggers {
