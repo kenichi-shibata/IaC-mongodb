@@ -44,7 +44,7 @@ resource "null_resource" "bootstrap_configsvr" {
 
 /* add config svr specific setup to servers*/
 data "template_file" "config_svr" {
-	template = "${file("${path.module}/templates/configserver.conf")}"
+	template = "${file("${path.module}/templates/repl.conf")}"
 	count = "${var.count_configsvr}"
 	vars {
 		bindIp = "${element(aws_instance.cfg.*.private_ip, count.index)}"

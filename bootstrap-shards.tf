@@ -45,7 +45,7 @@ resource "null_resource" "bootstrap_shard_svr" {
 
 /* add config svr specific setup to servers*/
 data "template_file" "shard_svr" {
-	template = "${file("${path.module}/templates/configserver.conf")}"
+	template = "${file("${path.module}/templates/repl.conf")}"
 	count = "${var.count_shardsvr * var.count_shardsvr_replica}"
 	vars {
 		bindIp = "${element(aws_instance.shards.*.private_ip, count.index)}"

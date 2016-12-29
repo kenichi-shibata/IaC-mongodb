@@ -44,7 +44,7 @@ resource "null_resource" "bootstrap_query_router" {
 
 /* add config svr specific setup to servers*/
 data "template_file" "query_router" {
-	template = "${file("${path.module}/templates/configserver.conf")}"
+	template = "${file("${path.module}/templates/repl.conf")}"
 	count = "${var.count_queryrouter}"
 	vars {
 		bindIp = "${element(aws_instance.query_router.*.private_ip, count.index)}"
