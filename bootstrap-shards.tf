@@ -1,7 +1,7 @@
-resource "null_resource" "bootstrap_shard_svr" {
+resource "null_resource" "bootstrap_config_svr" {
 	depends_on = ["aws_instance.shards"]
 	depends_on = ["aws_instance.vpn_server"]
-	count = "${var.count_shardsvr * var.count_shardsvr_replica}"
+	count = "${var.count_configsvr}"
 
 	triggers {
 		shards_cluster = "${join(",",aws_instance.shards.*.id)}"
@@ -55,9 +55,9 @@ data "template_file" "shard_svr" {
 	}
 }
 
-resource "null_resource" "shard_svr_mongodb" {
-	depends_on = ["null_resource.bootstrap_shard_svr"]
-	count = "${var.count_shardsvr * var.count_shardsvr_replica}"
+resource "null_resource" "config_svr_mongodb" {
+	depends_on = ["null_resource.bootstrap_mongodb"]
+	count = "${var.count_configsvr}"
 
 	triggers {
 		shards_cluster = "${join(",",aws_instance.shards.*.id)}"

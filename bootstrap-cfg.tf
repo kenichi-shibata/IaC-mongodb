@@ -48,6 +48,8 @@ data "template_file" "config_svr" {
 	count = "${var.count_configsvr}"
 	vars {
 		bindIp = "${element(aws_instance.cfg.*.private_ip, count.index)}"
+		clusterRole = "configsvr"
+		replSetName = "cfg0"
 	}
 }
 
