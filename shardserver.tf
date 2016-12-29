@@ -13,7 +13,7 @@ resource "aws_instance" "shards" {
 	ebs_optimized = "${var.ebs_optimized}"
 	tenancy = "${var.tenancy_shardsvr}"
 	key_name = "${var.key_pair}"
-	disable_api_termination = "true"
+	/*disable_api_termination = "true"*/
 	monitoring = "true"
 
 	subnet_id = "${lookup(map("0","${aws_subnet.private_primary.id}","1","${aws_subnet.private_secondary.id}"),count.index % 2)}"
@@ -24,7 +24,7 @@ resource "aws_instance" "shards" {
 		volume_type = "io1"
 		volume_size = "${var.volume_size_shardsvr}"
 		iops = "${var.volume_iops_shardsvr}"
-		delete_on_termination = "false"
+		/*delete_on_termination = "false"*/
 	}
 
 }

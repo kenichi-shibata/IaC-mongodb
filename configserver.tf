@@ -11,22 +11,25 @@ resource "aws_instance" "cfg" {
 	}
 
 	depends_on = ["aws_security_group.allow_mongodb"]
+	depends_on = ["aws_nat_gateway.gw"]
+	depends_on = ["aws_nat_gateway.gw_secondary"]
 	instance_type = "${var.instance_type_configsvr}"
 	ebs_optimized = "${var.ebs_optimized}"
 	tenancy = "${var.tenancy_configsvr}"
 	key_name = "${var.key_pair}"
-	disable_api_termination = "true"
+	/*disable_api_termination = "true" for terraform destroy*/
 	monitoring = "true"
 
 	subnet_id = "${lookup(map("0","${aws_subnet.private_primary.id}","1","${aws_subnet.private_secondary.id}"),count.index % 2)}"
 	associate_public_ip_address = false
 	vpc_security_group_ids =  ["${aws_security_group.allow_mongodb.id}"]
 
-	root_block_device = {
+	ebs_block_device = {
+		device_name = "/dev/sdm"
 		volume_type = "io1"
 		volume_size = "${var.volume_size_configsvr}"
 		iops = "${var.volume_iops_configsvr}"
-		delete_on_termination = "false"
+		/*delete_on_termination = "false" this is causing issues*/
 	}
 
 }

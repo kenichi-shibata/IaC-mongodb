@@ -11,7 +11,7 @@ resource "aws_instance" "query_router" {
 	ebs_optimized = "${var.ebs_optimized}"
 	tenancy = "${var.tenancy_queryrouter}"
 	key_name = "${var.key_pair}"
-	disable_api_termination = "true"
+	/*disable_api_termination = "true"*/
 	monitoring = "true"
 
 	subnet_id = "${lookup(map("0","${aws_subnet.private_primary.id}","1","${aws_subnet.private_secondary.id}"),count.index % 2)}"
@@ -22,7 +22,7 @@ resource "aws_instance" "query_router" {
 		volume_type = "io1"
 		volume_size = "${var.volume_size_queryrouter}"
 		iops = "${var.volume_iops_queryrouter}"
-		delete_on_termination = "false"
+		/*delete_on_termination = "false"*/
 	}
 
 }
