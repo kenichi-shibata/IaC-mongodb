@@ -1,7 +1,7 @@
-resource "null_resource" "bootstrap_config_svr" {
+resource "null_resource" "bootstrap_shard_svr" {
 	depends_on = ["aws_instance.shards"]
 	depends_on = ["aws_instance.vpn_server"]
-	count = "${var.count_configsvr}"
+	count = "${var.count_shardsvr * var.count_shardsvr_replica}"
 
 	triggers {
 		shards_cluster = "${join(",",aws_instance.shards.*.id)}"
@@ -25,13 +25,9 @@ resource "null_resource" "bootstrap_config_svr" {
 			bastion_host = "${aws_instance.vpn_server.public_ip}"
 		}
 	}
-/* SANITY CHECK ping google.com to check if instance is connected and NAT is up */
+
 	provisioner "remote-exec" {
 		inline = [
-			"while true;
-				do ping -c1 www.google.com > /dev/null && echo 'internet is up' && break;
-				sleep 5;
-			done; ",
 			"sudo yum update -y",
 		 	"sudo service ntpd restart",
 			"sudo chkconfig ntpd on",
@@ -48,19 +44,20 @@ resource "null_resource" "bootstrap_config_svr" {
 }
 
 /* add config svr specific setup to servers*/
-data "template_file" "config_svr" {
+data "template_file" "shard_svr" {
 	template = "${file("${path.module}/templates/configserver.conf")}"
-	count = "${var.count_configsvr}"
+	count = "${var.count_shardsvr * var.count_shardsvr_replica}"
 	vars {
 		bindIp = "${element(aws_instance.shards.*.private_ip, count.index)}"
-		clusterRole = "configsvr"
+		clusterRole = "null"
+		/*configDB = "<configReplSetName>/cfg1.example.net:27017,cfg2.example.net:27017"*/
 		replSetName = "shards0"
 	}
 }
 
-resource "null_resource" "config_svr_mongodb" {
-	depends_on = ["null_resource.bootstrap_mongodb"]
-	count = "${var.count_configsvr}"
+resource "null_resource" "shard_svr_mongodb" {
+	depends_on = ["null_resource.bootstrap_shard_svr"]
+	count = "${var.count_shardsvr * var.count_shardsvr_replica}"
 
 	triggers {
 		shards_cluster = "${join(",",aws_instance.shards.*.id)}"

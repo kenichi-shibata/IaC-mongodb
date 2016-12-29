@@ -1,7 +1,7 @@
-resource "null_resource" "bootstrap_config_svr" {
+resource "null_resource" "bootstrap_query_router" {
 	depends_on = ["aws_instance.query_router"]
 	depends_on = ["aws_instance.vpn_server"]
-	count = "${var.count_configsvr}"
+	count = "${var.count_queryrouter}"
 
 	triggers {
 		query_router_cluster = "${join(",",aws_instance.query_router.*.id)}"
@@ -25,13 +25,8 @@ resource "null_resource" "bootstrap_config_svr" {
 			bastion_host = "${aws_instance.vpn_server.public_ip}"
 		}
 	}
-/* SANITY CHECK ping google.com to check if instance is connected and NAT is up */
 	provisioner "remote-exec" {
 		inline = [
-			"while true;
-				do ping -c1 www.google.com > /dev/null && echo 'internet is up' && break;
-				sleep 5;
-			done; ",
 			"sudo yum update -y",
 		 	"sudo service ntpd restart",
 			"sudo chkconfig ntpd on",
@@ -48,9 +43,9 @@ resource "null_resource" "bootstrap_config_svr" {
 }
 
 /* add config svr specific setup to servers*/
-data "template_file" "config_svr" {
+data "template_file" "query_router" {
 	template = "${file("${path.module}/templates/configserver.conf")}"
-	count = "${var.count_configsvr}"
+	count = "${var.count_queryrouter}"
 	vars {
 		bindIp = "${element(aws_instance.query_router.*.private_ip, count.index)}"
 		clusterRole = "configsvr"
@@ -58,9 +53,9 @@ data "template_file" "config_svr" {
 	}
 }
 
-resource "null_resource" "config_svr_mongodb" {
+resource "null_resource" "query_router_mongodb" {
 	depends_on = ["null_resource.bootstrap_mongodb"]
-	count = "${var.count_configsvr}"
+	count = "${var.count_queryrouter}"
 
 	triggers {
 		query_router_cluster = "${join(",",aws_instance.query_router.*.id)}"
