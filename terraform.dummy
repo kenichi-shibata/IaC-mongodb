@@ -7,13 +7,26 @@ ebs_optimized	="" /* 1 = true 0 = false please check instance types which suppor
 key_pair			="" /* exact same from your aws key_pair */
 
 /*instances */
-instance_type_openvpn 	="" /* for openvpn server */
+instance_type_openvpn 	="" /* for openvpn server (t2.micro recommended) */
 
-instance_type_configsvr	="" /* instance type of the config servers (memory Optimized instance recommended) m3.large default */
+instance_type_configsvr	="" /* instance type of the config servers (memory Optimized instance recommended) m4.large default */
 count_configsvr 				="" /* number of config servers (3 recommended) */
-tenancy_configsvr				="" /* tenancy type defaults to shared (dedicated | shared) */
+tenancy_configsvr				="" /* tenancy type defaults to default (dedicated | default | host) */
 volume_size_configsvr		="" /* defaults to 100 gb */
 volume_iops_configsvr 	="" /* defaults to 2000 iops */
+
+instance_type_shardsvr	="" /* instance type of the config servers (memory Optimized instance recommended) m4.large default */
+count_shardsvr 				="" /* number of config servers (1 default) */
+count_shardsvr_replica = "" /* number of config servers per replica (3 recommended) */
+tenancy_shardsvr				="" /* tenancy type defaults to default (dedicated | default | host) */
+volume_size_shardsvr		="" /* defaults to 100 gb */
+volume_iops_shardsvr 	="" /* defaults to 2000 iops */
+
+instance_type_queryrouter	="" /* instance type of the config servers (memory Optimized instance recommended) m4.large default */
+count_queryrouter 				="" /* number of config servers (3 recommended) */
+tenancy_queryrouter				="" /* tenancy type defaults to default (dedicated | default | host) */
+volume_size_queryrouter		="" /* defaults to 100 gb */
+volume_iops_queryrouter 	="" /* defaults to 2000 iops */
 
 /*service*/
 service_name	=""
