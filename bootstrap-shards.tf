@@ -55,7 +55,7 @@ data "template_file" "shard_svr" {
 	}
 }
 
-resource "null_resource" "config_svr_mongodb" {
+resource "null_resource" "shard_svr_mongodb" {
 	depends_on = ["null_resource.bootstrap_shard_svr"]
 	count = "${var.count_configsvr}"
 
