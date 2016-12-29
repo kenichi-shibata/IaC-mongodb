@@ -18,11 +18,6 @@ variable "instance_type_openvpn"  {
   description = "instance type of the first ec2 instance"
 }
 
-variable "instance_type_configsvr" {
-	default = "m3.large"
-	description = "instance type of the config server"
-}
-
 variable "ebs_optimized" {
   description = "instance status"
 }
@@ -37,13 +32,18 @@ variable "key_pair" {
 	default = "id_rsa"
 }
 
+variable "instance_type_configsvr" {
+	default = "m4.large"
+	description = "instance type of the config server"
+}
+
 variable "count_configsvr" {
   default = "3"
 	description = "Number of config servers to be used"
 }
 
 variable "tenancy_configsvr" {
-  default = "shared"
+  default = "default"
 	description = "Harware tenancy of the config server"
 }
 
@@ -57,6 +57,60 @@ variable "volume_size_configsvr" {
 	description = "EBS ssd io1 block size for the config server"
 }
 
+variable "instance_type_shardsvr" {
+	default = "m4.large"
+	description = "instance type of the shard server"
+}
+
+variable "count_shardsvr" {
+  default = "1"
+	description = "Number of shard servers to be used"
+}
+
+variable "count_shardsvr_replica" {
+  default = "3"
+	description = "Number of shard server to be used"
+}
+
+variable "tenancy_shardsvr" {
+  default = "default"
+	description = "Harware tenancy of the shard server"
+}
+
+variable "volume_iops_shardsvr" {
+	default = "2000"
+	description = " IOPS for the aws ebs shard server/s"
+}
+
+variable "volume_size_shardsvr" {
+	default = "100"
+	description = "EBS ssd io1 block size for the shard server"
+}
+
+variable "instance_type_queryrouter" {
+	default = "m4.large"
+	description = "instance type of the query router"
+}
+
+variable "count_queryrouter" {
+  default = "3"
+	description = "Number of query routers to be used"
+}
+
+variable "tenancy_queryrouter" {
+  default = "default"
+	description = "Harware tenancy of the query router"
+}
+
+variable "volume_iops_queryrouter" {
+	default = "2000"
+	description = " IOPS for the aws ebs query router/s"
+}
+
+variable "volume_size_queryrouter" {
+	default = "100"
+	description = "EBS ssd io1 block size for the query router"
+}
 
 variable "centos_amis" {
   description = "CentOS AMIs by region"

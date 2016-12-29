@@ -9,7 +9,6 @@ resource "aws_instance" "vpn_server" {
 	}
 
 	instance_type = "${var.instance_type_openvpn}"
-	ebs_optimized = "${var.ebs_optimized}"
 	key_name = "${var.key_pair}"
 	subnet_id = "${aws_subnet.public_primary.id}"
 	associate_public_ip_address = true
